@@ -10,3 +10,4 @@ export 'utils/happy_hash.dart';
 export 'utils/initiated.dart';
 export 'utils/ready_or_not.dart';
 export 'utils/tracing.dart';
+export 'utils/use_case.dart';
