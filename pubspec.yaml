@@ -1,0 +1,36 @@
+name: dart_marganam
+description: A commonly utilizable dart extension and utility package collection
+version: 0.1.0
+homepage: https://github.com/Terran-Source/dart-marganam-packages
+repository: https://github.com/Terran-Source/dart-marganam-packages
+issue_tracker: https://github.com/Terran-Source/dart-marganam-packages/issues
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+  # flutter: ">=1.17.0"
+
+dependencies:
+  # flutter:
+  #   sdk: flutter
+
+  # Functional programming
+  dartz: ^0.10.0-nullsafety.2
+
+  extend: ^0.1.1
+
+  # http
+  http: ^0.13.3
+
+  # moor-sqlite
+  moor: ^4.5.0
+
+  # path libraries
+  path: ^1.8.0
+  path_provider: ^2.0.2
+
+dev_dependencies:
+  english_words: ^4.0.0
+  interpolation: ^2.1.2
+  lint: ^1.6.0
+  matcher: ^0.12.11
+  test: ^1.17.11
