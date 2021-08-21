@@ -12,7 +12,9 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:dart_marganam/extensions.dart';
 
+import 'disposable.dart';
 import 'formatted_exception.dart';
+import 'initiated.dart';
 import 'ready_or_not.dart';
 
 String get _moduleName => 'file_provider';
@@ -276,7 +278,9 @@ FormattedException<T> _formattedException<T extends Exception>(
       moduleName: _moduleName,
     );
 
-class RemoteFileCache with ReadyOrNotMixin {
+class RemoteFileCache
+    with ReadyOrNotMixin
+    implements Initiated, Disposable<bool> {
   factory RemoteFileCache() => universal;
 
   static RemoteFileCache universal = RemoteFileCache._();
@@ -286,6 +290,9 @@ class RemoteFileCache with ReadyOrNotMixin {
     additionalSingleJobs[_cleanUpJob] = _cleanUp;
     additionalSingleJobs[_dumpJob] = _dump;
   }
+
+  @override
+  FutureOr initiate() => getReady();
 
   static int maxCachedRetentionMins = 7 * 24 * 60; // 7 days
 
@@ -489,4 +496,12 @@ class RemoteFileCache with ReadyOrNotMixin {
   /// Must be called before application ends (or frequently),
   /// or else, any changes after last [dump] will be lost
   FutureOr<File?> dump() => triggerJob<File>(_dumpJob, onReady: true);
+
+  @override
+  FutureOr dispose([bool? flag]) async {
+    if (ready) {
+      await cleanUp();
+      await dump();
+    }
+  }
 }
