@@ -27,6 +27,9 @@ final Map<Type, String> exceptionDisplay = {
   TlsException: "It's the security protocol named TLS to blame. {message}",
 };
 
+void enhanceExceptionDisplay<T>(String message) =>
+    exceptionDisplay[T] = message;
+
 class FormattedException<T extends Exception> {
   final T _exception;
   final Map<String, dynamic> messageParams;

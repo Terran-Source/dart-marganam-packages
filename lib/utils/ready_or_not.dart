@@ -82,7 +82,7 @@ mixin ReadyOrNotMixin<T> {
   FutureOr<T>? _future;
 
   /// Registers the [getReady] singleton job
-  ReadyOrNotWorker<T>? getReadyWorker;
+  late ReadyOrNotWorker<T>? getReadyWorker;
 
   /// Register additional singleton jobs
   final additionalSingleJobs = <String, ReadyOrNotWorker>{};

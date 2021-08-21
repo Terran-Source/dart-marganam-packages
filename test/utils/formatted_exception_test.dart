@@ -27,6 +27,14 @@ void main() {
       expect(exceptionDisplay.containsKey(Future), isTrue);
       expect(exceptionDisplay[Future], newExceptionMessage);
     });
+    test('new type can be added via enhanceExceptionDisplay()', () {
+      // act
+      enhanceExceptionDisplay<Future>(newExceptionMessage);
+
+      // assert
+      expect(exceptionDisplay.containsKey(Future), isTrue);
+      expect(exceptionDisplay[Future], newExceptionMessage);
+    });
     test('should not contain other type', () {
       // assert
       expect(exceptionDisplay.containsKey(Future), isFalse);
