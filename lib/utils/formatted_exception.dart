@@ -47,6 +47,7 @@ class FormattedException<T extends Exception> {
     this.stackTrace,
     this.moduleName = 'Generic',
   }) {
+    messageParams['message'] ??= _exception.toString();
     if (debug) {
       //// TODO: write structured log
       // _logger

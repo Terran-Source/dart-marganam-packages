@@ -1,5 +1,6 @@
 library dart_marganam.utils;
 
+export 'package:interpolation/interpolation.dart';
 export 'utils/app_parameter.dart';
 export 'utils/dartz_execution.dart';
 export 'utils/disposable.dart';
