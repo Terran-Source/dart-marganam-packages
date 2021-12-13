@@ -27,11 +27,15 @@ class _MoreOrLessEquals extends Matcher {
       description.add('$value (±$epsilon)');
 
   @override
-  Description describeMismatch(dynamic item, Description mismatchDescription,
-      Map<dynamic, dynamic> matchState, bool verbose) {
+  Description describeMismatch(
+    dynamic item,
+    Description mismatchDescription,
+    Map<dynamic, dynamic> matchState,
+    bool verbose,
+  ) {
     return super
         .describeMismatch(item, mismatchDescription, matchState, verbose)
-          ..add('$item is not in the range of $value (±$epsilon).');
+      ..add('$item is not in the range of $value (±$epsilon).');
   }
 }
 
@@ -45,7 +49,7 @@ class _MoreOrLessEquals extends Matcher {
 /// to compare floating point numbers that are the result of different sequences
 /// of operations, such that they may have accumulated slightly different
 /// errors.
-/// {@endtemplate}
+/// {@end-template}
 ///
 /// See also:
 ///
@@ -55,7 +59,9 @@ class _MoreOrLessEquals extends Matcher {
 ///    range.
 ///  * [rectMoreOrLessEquals] and [offsetMoreOrLessEquals], which do something
 ///    similar but for [Rect]s and [Offset]s respectively.
-Matcher moreOrLessEquals(double value,
-    {double epsilon = precisionErrorTolerance}) {
+Matcher moreOrLessEquals(
+  double value, {
+  double epsilon = precisionErrorTolerance,
+}) {
   return _MoreOrLessEquals(value, epsilon);
 }
