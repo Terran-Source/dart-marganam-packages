@@ -5,20 +5,20 @@ import 'dart:io';
 
 import 'package:interpolation/interpolation.dart';
 
-const _defaultExceptionMessage = "Something went wrong. {message}";
+const _defaultExceptionMessage = 'Something went wrong. {message}';
 const _defaultAppName = 'FormattedException';
 
 final Map<Type, String> exceptionDisplay = {
   Exception: _defaultExceptionMessage,
-  FormatException: "Bad formatting!!! {message}",
-  IOException: "The system failed getting Input or taking Output. {message}",
-  FileSystemException: "Problem with files. {message}",
+  FormatException: 'Bad formatting!!! {message}',
+  IOException: 'The system failed getting Input or taking Output. {message}',
+  FileSystemException: 'Problem with files. {message}',
   HttpException:
-      "Could not {method} information from internet. Unreachable {host}.",
+      'Could not {method} information from internet. Unreachable {host}.',
   SocketException:
-      "The remote connection failed due to my precious Socket. {message}",
+      'The remote connection failed due to my precious Socket. {message}',
   WebSocketException:
-      "The remote connection failed due to my precious Socket. {message}",
+      'The remote connection failed due to my precious Socket. {message}',
   SignalException: 'Some signal went wrong.  {message}',
   StdinException:
       "Someone tried to give some input, that I couldn't understand. {message}",
@@ -32,7 +32,7 @@ void enhanceExceptionDisplay<T>(String message) =>
 
 class FormattedException<T extends Exception> {
   final T _exception;
-  final Map<String, dynamic> messageParams;
+  late Map<String, dynamic> messageParams;
   final StackTrace? stackTrace;
   final String? moduleName;
 
@@ -43,11 +43,12 @@ class FormattedException<T extends Exception> {
 
   FormattedException(
     this._exception, {
-    this.messageParams = const {},
+    Map<String, dynamic>? messageParams,
     this.stackTrace,
     this.moduleName = 'Generic',
   }) {
-    messageParams['message'] ??= _exception.toString();
+    this.messageParams = Map.of(messageParams ?? {});
+    this.messageParams['message'] ??= _exception.toString();
     if (debug) {
       //// TODO: write structured log
       // _logger

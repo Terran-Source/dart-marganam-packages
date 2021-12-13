@@ -51,50 +51,78 @@ void main() {
   final exceptions = <Exception>[
     Exception(newExceptionMessage),
     FormatException(newExceptionMessage, Uri.parse('https://www.example.com')),
-    const FileSystemException(newExceptionMessage, '/path/to/something',
-        OSError(newExceptionMessage, 404)),
-    HttpException(newExceptionMessage,
-        uri: Uri.parse('https://www.example.com')),
-    SocketException(newExceptionMessage,
-        osError: const OSError(newExceptionMessage, 404),
-        address: InternetAddress('127.0.0.1'),
-        port: 80),
+    const FileSystemException(
+      newExceptionMessage,
+      '/path/to/something',
+      OSError(newExceptionMessage, 404),
+    ),
+    HttpException(
+      newExceptionMessage,
+      uri: Uri.parse('https://www.example.com'),
+    ),
+    SocketException(
+      newExceptionMessage,
+      osError: const OSError(newExceptionMessage, 404),
+      address: InternetAddress('127.0.0.1'),
+      port: 80,
+    ),
     const WebSocketException(newExceptionMessage),
     const SignalException(
-        newExceptionMessage, OSError(newExceptionMessage, 404)),
+      newExceptionMessage,
+      OSError(newExceptionMessage, 404),
+    ),
     const StdinException(
-        newExceptionMessage, OSError(newExceptionMessage, 404)),
+      newExceptionMessage,
+      OSError(newExceptionMessage, 404),
+    ),
     const StdoutException(
-        newExceptionMessage, OSError(newExceptionMessage, 404)),
+      newExceptionMessage,
+      OSError(newExceptionMessage, 404),
+    ),
     ProcessException(
-        'SomeProcess',
-        List<String>.generate(3, (i) => WordPair.random().asString),
-        newExceptionMessage,
-        404),
+      'SomeProcess',
+      List<String>.generate(3, (i) => WordPair.random().asString),
+      newExceptionMessage,
+      404,
+    ),
     const TlsException(newExceptionMessage, OSError(newExceptionMessage, 404)),
-    _CustomException(newExceptionMessage, 'My Custom Exception MEssage')
+    _CustomException(newExceptionMessage, 'My Custom Exception MEssage'),
   ];
 
   for (final exception in exceptions) {
-    formattedExceptionGroupTest(exception, appName, moduleName, messageParams,
-        runtimeType: exception.runtimeType.toString().startsWith('_')
-            ? Exception
-            : null);
+    formattedExceptionGroupTest(
+      exception,
+      appName,
+      moduleName,
+      messageParams,
+      runtimeType:
+          exception.runtimeType.toString().startsWith('_') ? Exception : null,
+    );
   }
 
   // check with a custom exception with added details to exceptionDisplay
   final customException =
       _CustomException(newExceptionMessage, 'My Custom Exception Message');
   formattedExceptionGroupTest(
-      customException, appName, moduleName, messageParams,
-      doSetup: true);
+    customException,
+    appName,
+    moduleName,
+    messageParams,
+    doSetup: true,
+  );
 
   // check with a existing exception with changed details to exceptionDisplay
-  final customHttpException = HttpException(newExceptionMessage,
-      uri: Uri.parse('https://www.example.com'));
+  final customHttpException = HttpException(
+    newExceptionMessage,
+    uri: Uri.parse('https://www.example.com'),
+  );
   formattedExceptionGroupTest(
-      customHttpException, appName, moduleName, messageParams,
-      doSetup: true);
+    customHttpException,
+    appName,
+    moduleName,
+    messageParams,
+    doSetup: true,
+  );
 }
 
 void cloneMap<K, V>(Map<K, V> source, Map<K, V> dest) {
@@ -116,8 +144,8 @@ void formattedExceptionGroupTest<T extends Exception>(
   final overrideRuntimeType = runtimeType ?? exception.runtimeType;
   final actualRuntimeType = exception.runtimeType;
   group(
-      'FormattedException test for $actualRuntimeType${doSetup ? ': with setup' : ''}',
-      () {
+      'FormattedException test for '
+      '$actualRuntimeType${doSetup ? ': with setup' : ''}', () {
     setUp(() {
       if (doSetup) {
         exceptionDisplay[_CustomException] =
@@ -125,9 +153,13 @@ void formattedExceptionGroupTest<T extends Exception>(
         exceptionDisplay[HttpException] =
             'The HttpException message has been changed. {message}';
         print(
-            'New Message set: (_CustomException): ${exceptionDisplay[_CustomException]}');
+          'New Message set: (_CustomException): '
+          '${exceptionDisplay[_CustomException]}',
+        );
         print(
-            'New Message set: (HttpException): ${exceptionDisplay[HttpException]}');
+          'New Message set: (HttpException): '
+          '${exceptionDisplay[HttpException]}',
+        );
       }
     });
     test('create new instance', () {
@@ -145,9 +177,14 @@ void formattedExceptionGroupTest<T extends Exception>(
       expect(result.exceptionType, actualRuntimeType);
       expect(result.logSource, 'FormattedException:Generic');
       expect(
-          result.displayedMessage,
-          _interpolation.eval(
-              getExceptionDisplayMessage(overrideRuntimeType), {}).trim());
+        result.displayedMessage,
+        _interpolation
+            .eval(
+              getExceptionDisplayMessage(overrideRuntimeType),
+              result.messageParams,
+            )
+            .trim(),
+      );
     });
     test('set FormattedException appName', () {
       // arrange
@@ -165,9 +202,14 @@ void formattedExceptionGroupTest<T extends Exception>(
       expect(result.exceptionType, actualRuntimeType);
       expect(result.logSource, 'Sprightly:Generic');
       expect(
-          result.displayedMessage,
-          _interpolation.eval(
-              getExceptionDisplayMessage(overrideRuntimeType), {}).trim());
+        result.displayedMessage,
+        _interpolation
+            .eval(
+              getExceptionDisplayMessage(overrideRuntimeType),
+              result.messageParams,
+            )
+            .trim(),
+      );
     });
     test('set FormattedException moduleName', () {
       // act
@@ -182,9 +224,14 @@ void formattedExceptionGroupTest<T extends Exception>(
       expect(result.exceptionType, actualRuntimeType);
       expect(result.logSource, 'FormattedException:$moduleName');
       expect(
-          result.displayedMessage,
-          _interpolation.eval(
-              getExceptionDisplayMessage(overrideRuntimeType), {}).trim());
+        result.displayedMessage,
+        _interpolation
+            .eval(
+              getExceptionDisplayMessage(overrideRuntimeType),
+              result.messageParams,
+            )
+            .trim(),
+      );
     });
     test('set both FormattedException appName & moduleName', () {
       // arrange
@@ -202,9 +249,14 @@ void formattedExceptionGroupTest<T extends Exception>(
       expect(result.exceptionType, actualRuntimeType);
       expect(result.logSource, '$appName:$moduleName');
       expect(
-          result.displayedMessage,
-          _interpolation.eval(
-              getExceptionDisplayMessage(overrideRuntimeType), {}).trim());
+        result.displayedMessage,
+        _interpolation
+            .eval(
+              getExceptionDisplayMessage(overrideRuntimeType),
+              result.messageParams,
+            )
+            .trim(),
+      );
     });
     test('set FormattedException messageParams', () {
       // act
@@ -220,11 +272,14 @@ void formattedExceptionGroupTest<T extends Exception>(
       expect(result.exceptionType, actualRuntimeType);
       expect(result.logSource, 'FormattedException:Generic');
       expect(
-          result.displayedMessage,
-          _interpolation
-              .eval(getExceptionDisplayMessage(overrideRuntimeType),
-                  messageParams)
-              .trim());
+        result.displayedMessage,
+        _interpolation
+            .eval(
+              getExceptionDisplayMessage(overrideRuntimeType),
+              messageParams,
+            )
+            .trim(),
+      );
     });
     test('set all FormattedException parameters', () {
       // arrange
@@ -247,11 +302,14 @@ void formattedExceptionGroupTest<T extends Exception>(
       expect(result.exceptionType, actualRuntimeType);
       expect(result.logSource, '$appName:$moduleName');
       expect(
-          result.displayedMessage,
-          _interpolation
-              .eval(getExceptionDisplayMessage(overrideRuntimeType),
-                  messageParams)
-              .trim());
+        result.displayedMessage,
+        _interpolation
+            .eval(
+              getExceptionDisplayMessage(overrideRuntimeType),
+              messageParams,
+            )
+            .trim(),
+      );
       print(result.displayedMessage);
     });
   });
