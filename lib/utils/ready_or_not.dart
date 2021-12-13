@@ -105,7 +105,9 @@ mixin ReadyOrNotMixin<T> {
           _future = null;
           _working = false;
         }
-      } else if (_working) await _future;
+      } else if (_working) {
+        await _future;
+      }
     }
   }
 

@@ -1,5 +1,5 @@
-import 'package:test/test.dart';
 import 'package:dart_marganam/extensions/string.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('Trimmer test', () {
