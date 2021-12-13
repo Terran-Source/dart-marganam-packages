@@ -91,7 +91,7 @@ String hashedAll(
   }
   chunks.close();
   var result = "${prefixLibrary ? '${library.toEnumString()}:' : ''}"
-      "${sink.events.single}";
+      '${sink.events.single}';
   if (null == hashLength) return result;
   if (result.length < hashLength) {
     result += _key;

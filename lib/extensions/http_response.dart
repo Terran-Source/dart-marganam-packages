@@ -89,10 +89,11 @@ final Map<String, String> mimeTypes = {
 };
 
 extension HttpHeaderParser on String {
-  Map<String, dynamic> parseHeaderValue(
-      {String fieldSeparator = ";",
-      String valueSeparator = "=",
-      List<String> valueTrimmer = const ["'", '"']}) {
+  Map<String, dynamic> parseHeaderValue({
+    String fieldSeparator = ';',
+    String valueSeparator = '=',
+    List<String> valueTrimmer = const ["'", '"'],
+  }) {
     final fields = split(fieldSeparator).map((c) => c.trim());
     final result = <String, dynamic>{};
     for (final field in fields) {
@@ -107,7 +108,7 @@ extension HttpHeaderParser on String {
   }
 }
 
-const _defaultCharset = "utf-8";
+const _defaultCharset = 'utf-8';
 
 extension HttpResponseExtension on BaseResponse {
   bool get isSuccessStatusCode => 200 <= statusCode && statusCode <= 299;

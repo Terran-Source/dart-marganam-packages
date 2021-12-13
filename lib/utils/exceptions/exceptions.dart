@@ -19,7 +19,8 @@ class ExceptionPackage with ReadyOrNotMixin implements Initiated {
 
   void enhanceFormattedException() {
     enhanceExceptionDisplay<PreConditionFailedException>(
-        PreConditionFailedException.formattedMessage());
+      PreConditionFailedException.formattedMessage(),
+    );
   }
 
   @override

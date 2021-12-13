@@ -86,8 +86,12 @@ void main() {
             for (final hashLength in hashLengths) {
               print('check with length: $hashLength');
               // act
-              final result = hashed(item,
-                  hashLength: hashLength, library: library, key: key);
+              final result = hashed(
+                item,
+                hashLength: hashLength,
+                library: library,
+                key: key,
+              );
 
               // assert
               expect(result.length, hashLength);
@@ -105,8 +109,12 @@ void main() {
           test('hashedAll(): length check', () {
             for (final hashLength in hashLengths) {
               // act
-              final result = hashedAll(items,
-                  hashLength: hashLength, library: library, key: key);
+              final result = hashedAll(
+                items,
+                hashLength: hashLength,
+                library: library,
+                key: key,
+              );
 
               // assert
               expect(result.length, hashLength);

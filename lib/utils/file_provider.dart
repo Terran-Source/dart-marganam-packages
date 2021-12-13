@@ -38,8 +38,13 @@ Future<Directory> getDirectory(
   bool isSupportDirectory = false,
   bool isAbsolute = false,
 }) async =>
-    Directory(await getAbsolutePath(path,
-        isSupportDirectory: isSupportDirectory, isAbsolute: isAbsolute));
+    Directory(
+      await getAbsolutePath(
+        path,
+        isSupportDirectory: isSupportDirectory,
+        isAbsolute: isAbsolute,
+      ),
+    );
 
 Future<File> getFile(
   String filePath, {
@@ -47,8 +52,13 @@ Future<File> getFile(
   bool recreateFile = false,
   bool isAbsolute = false,
 }) async {
-  final file = File(await getAbsolutePath(filePath,
-      isSupportDirectory: isSupportFile, isAbsolute: isAbsolute));
+  final file = File(
+    await getAbsolutePath(
+      filePath,
+      isSupportDirectory: isSupportFile,
+      isAbsolute: isAbsolute,
+    ),
+  );
   if (recreateFile && await file.exists()) await file.delete();
   return file;
 }
@@ -59,8 +69,11 @@ Future<String?> getFileText(
   bool isSupportFile = false,
   bool isAbsolute = false,
 }) async {
-  final file = await getFile(filePath,
-      isSupportFile: isSupportFile, isAbsolute: isAbsolute);
+  final file = await getFile(
+    filePath,
+    isSupportFile: isSupportFile,
+    isAbsolute: isAbsolute,
+  );
   if (await file.exists()) return file.readAsString(encoding: encoding);
   return null;
 }
@@ -70,8 +83,11 @@ Future<Uint8List?> getFileContent(
   bool isSupportFile = false,
   bool isAbsolute = false,
 }) async {
-  final file = await getFile(filePath,
-      isSupportFile: isSupportFile, isAbsolute: isAbsolute);
+  final file = await getFile(
+    filePath,
+    isSupportFile: isSupportFile,
+    isAbsolute: isAbsolute,
+  );
   if (await file.exists()) return file.readAsBytes();
   return null;
 }
@@ -84,8 +100,11 @@ Future<File> saveTextFile(
   bool isSupportFile = false,
   bool isAbsolute = false,
 }) async {
-  final file = await getFile(filePath,
-      isSupportFile: isSupportFile, isAbsolute: isAbsolute);
+  final file = await getFile(
+    filePath,
+    isSupportFile: isSupportFile,
+    isAbsolute: isAbsolute,
+  );
   return file.writeAsString(text, mode: mode, encoding: encoding, flush: true);
 }
 
@@ -96,11 +115,14 @@ Future<File> appendTextToFile(
   bool isSupportFile = false,
   bool isAbsolute = false,
 }) =>
-    saveTextFile(filePath, text,
-        mode: FileMode.writeOnlyAppend,
-        encoding: encoding,
-        isSupportFile: isSupportFile,
-        isAbsolute: isAbsolute);
+    saveTextFile(
+      filePath,
+      text,
+      mode: FileMode.writeOnlyAppend,
+      encoding: encoding,
+      isSupportFile: isSupportFile,
+      isAbsolute: isAbsolute,
+    );
 
 Future<File> saveFileAsBytes(
   String filePath,
@@ -109,8 +131,11 @@ Future<File> saveFileAsBytes(
   bool isSupportFile = false,
   bool isAbsolute = false,
 }) async {
-  final file = await getFile(filePath,
-      isSupportFile: isSupportFile, isAbsolute: isAbsolute);
+  final file = await getFile(
+    filePath,
+    isSupportFile: isSupportFile,
+    isAbsolute: isAbsolute,
+  );
   return file.writeAsBytes(fileContent, mode: mode, flush: true);
 }
 
@@ -120,10 +145,13 @@ Future<File> appendBytesToFile(
   bool isSupportFile = false,
   bool isAbsolute = false,
 }) =>
-    saveFileAsBytes(filePath, fileContent,
-        mode: FileMode.writeOnlyAppend,
-        isSupportFile: isSupportFile,
-        isAbsolute: isAbsolute);
+    saveFileAsBytes(
+      filePath,
+      fileContent,
+      mode: FileMode.writeOnlyAppend,
+      isSupportFile: isSupportFile,
+      isAbsolute: isAbsolute,
+    );
 
 Future<File> saveFileAsByteStream(
   String filePath,
@@ -133,8 +161,11 @@ Future<File> saveFileAsByteStream(
   bool isSupportFile = false,
   bool isAbsolute = false,
 }) async {
-  final file = await getFile(filePath,
-      isSupportFile: isSupportFile, isAbsolute: isAbsolute);
+  final file = await getFile(
+    filePath,
+    isSupportFile: isSupportFile,
+    isAbsolute: isAbsolute,
+  );
   final sink = file.openWrite(mode: mode, encoding: encoding);
   await fileContent.pipe(sink);
   await sink.flush();
@@ -149,19 +180,25 @@ Future<File> appendByteStreamToFile(
   bool isSupportFile = false,
   bool isAbsolute = false,
 }) =>
-    saveFileAsByteStream(filePath, fileContent,
-        mode: FileMode.writeOnlyAppend,
-        encoding: encoding,
-        isSupportFile: isSupportFile,
-        isAbsolute: isAbsolute);
+    saveFileAsByteStream(
+      filePath,
+      fileContent,
+      mode: FileMode.writeOnlyAppend,
+      encoding: encoding,
+      isSupportFile: isSupportFile,
+      isAbsolute: isAbsolute,
+    );
 
 Future<File> deleteFile(
   String filePath, {
   bool isSupportFile = false,
   bool isAbsolute = false,
 }) async {
-  final file = await getFile(filePath,
-      isSupportFile: isSupportFile, isAbsolute: isAbsolute);
+  final file = await getFile(
+    filePath,
+    isSupportFile: isSupportFile,
+    isAbsolute: isAbsolute,
+  );
   if (await file.exists()) await file.delete();
   return file;
 }
@@ -172,7 +209,8 @@ Future<String> getAssetText(
   String? extension,
 }) =>
     rootBundle.loadString(
-        p.join(assetDirectory ?? '', '$fileName${extension ?? ''}'));
+      p.join(assetDirectory ?? '', '$fileName${extension ?? ''}'),
+    );
 
 Future<Uint8List> getAssetBytes(
   String fileName, {
@@ -213,8 +251,10 @@ class DirectoryInfo {
   static Future<void> cleanUp(_DirectoryCleanUp target) async {
     final remainingFiles = <File>[];
     for (final file in target.directoryInfo.files) {
-      if (target.cache.values.any((cacheFile) =>
-          file.path == cacheFile.path && null != cacheFile.downloadOn)) {
+      if (target.cache.values.any(
+        (cacheFile) =>
+            file.path == cacheFile.path && null != cacheFile.downloadOn,
+      )) {
         remainingFiles.add(file);
       } else {
         await file.delete();
@@ -336,11 +376,13 @@ class RemoteFileCache
   String _getIdentifier(String source, [String? identifier]) =>
       identifier ?? source.escapeMessy();
 
-  /// Fetch the file from the [source] url and store in a the local [_cacheDirectory].
-  /// Then returns the [CacheFile] containing absolute path of the locally saved file.
+  /// Fetch the file from the [source] url and store in a the local
+  /// [_cacheDirectory]. Then returns the [CacheFile] containing absolute path
+  /// of the locally saved file.
   ///
-  /// an optional [identifier] can be specified to speed up the cache searching process.
-  /// If [identifier] is not specified, [source].[escapeMessy()] will be taken as the cache key.
+  /// an optional [identifier] can be specified to speed up the cache searching
+  /// process. If [identifier] is not specified, [source].[escapeMessy()] will
+  /// be taken as the cache key.
   Future<CacheFile?> _getRemoteFileAndCache(
     String source, {
     String? identifier,
@@ -356,14 +398,16 @@ class RemoteFileCache
       final response = await _client.get(Uri.parse(source), headers: headers);
       if (response.isSuccessStatusCode) {
         final fileName =
-            response.fileName ?? "$localIdentifier${response.fileExtension}";
+            response.fileName ?? '$localIdentifier${response.fileExtension}';
         // :Old Method:
         // var file = await saveFileAsByteStream(
         //     p.join(_cacheDirectory, fileName), response.stream,
         //     encoding: response.encoding);
         // :New Method:
         final file = await saveFileAsBytes(
-            p.join(_cacheDirectory, fileName), response.bodyBytes);
+          p.join(_cacheDirectory, fileName),
+          response.bodyBytes,
+        );
         return CacheFile(
           localIdentifier,
           source,
@@ -379,7 +423,7 @@ class RemoteFileCache
       throw _formattedException(
         e,
         stackTrace: st,
-        messageParams: {"method": "get", "host": e.uri?.host},
+        messageParams: {'method': 'get', 'host': e.uri?.host},
       );
     } on FormatException catch (e, st) {
       throw _formattedException(e, stackTrace: st);
@@ -397,8 +441,11 @@ class RemoteFileCache
     // final id = identifier ?? source;
     final id = _getIdentifier(source, identifier);
     if (!(_fileCache.containsKey(id) && null != _fileCache[id]!.downloadOn)) {
-      final cacheFile = await _getRemoteFileAndCache(source,
-          identifier: id, headers: headers);
+      final cacheFile = await _getRemoteFileAndCache(
+        source,
+        identifier: id,
+        headers: headers,
+      );
       if (null != cacheFile) {
         _fileCache[id] = cacheFile;
       } else {
@@ -413,8 +460,11 @@ class RemoteFileCache
     String? identifier,
     Map<String, String> headers = const <String, String>{},
   }) async {
-    final cacheFile = await _ensureFileExists(source,
-        identifier: identifier, headers: headers);
+    final cacheFile = await _ensureFileExists(
+      source,
+      identifier: identifier,
+      headers: headers,
+    );
     if (null != cacheFile) {
       cacheFile.lastAccessedOn = DateTime.now().toUtc();
       return getFileText(cacheFile.path, isAbsolute: true);
@@ -427,8 +477,11 @@ class RemoteFileCache
     String? identifier,
     Map<String, String> headers = const <String, String>{},
   }) async {
-    final cacheFile = await _ensureFileExists(source,
-        identifier: identifier, headers: headers);
+    final cacheFile = await _ensureFileExists(
+      source,
+      identifier: identifier,
+      headers: headers,
+    );
     if (null != cacheFile) {
       cacheFile.lastAccessedOn = DateTime.now().toUtc();
       return getFileContent(cacheFile.path, isAbsolute: true);
@@ -442,8 +495,13 @@ class RemoteFileCache
     String? identifier,
     Map<String, String> headers = const <String, String>{},
   }) async =>
-      mapper(await getRemoteText(source,
-          identifier: identifier, headers: headers));
+      mapper(
+        await getRemoteText(
+          source,
+          identifier: identifier,
+          headers: headers,
+        ),
+      );
 
   Future<T?> getRemoteContentAs<T>(
     String source,
@@ -451,8 +509,13 @@ class RemoteFileCache
     String? identifier,
     Map<String, String> headers = const <String, String>{},
   }) async =>
-      mapper(await getRemoteContent(source,
-          identifier: identifier, headers: headers));
+      mapper(
+        await getRemoteContent(
+          source,
+          identifier: identifier,
+          headers: headers,
+        ),
+      );
 
   Future<bool> _cleanFileCache() async {
     var result = false;
@@ -483,15 +546,18 @@ class RemoteFileCache
     return result;
   }
 
-  Future<bool> _cleanUp() async {
-    return _cleanFileCache().whenComplete(() =>
-        DirectoryInfo.cleanUp(_DirectoryCleanUp(_directoryInfo, _fileCache)));
-  }
+  Future<bool> _cleanUp() async => _cleanFileCache().whenComplete(
+        () => DirectoryInfo.cleanUp(
+          _DirectoryCleanUp(_directoryInfo, _fileCache),
+        ),
+      );
 
   FutureOr<bool?> cleanUp() => triggerJob<bool>(_cleanUpJob, onReady: true);
 
   Future<File> _dump() => saveTextFile(
-      p.join(_cacheDirectory, _cacheFile), json.encode(_fileCache));
+        p.join(_cacheDirectory, _cacheFile),
+        json.encode(_fileCache),
+      );
 
   /// Must be called before application ends (or frequently),
   /// or else, any changes after last [dump] will be lost

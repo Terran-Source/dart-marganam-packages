@@ -5,13 +5,14 @@ extension Trimmer on String {
 
   String trimming(String trimmer) {
     final pattern = RegExp(
-        '^[${trimmer.escapedTrim}]+(.*(?<![${trimmer.escapedTrim}]+))[${trimmer.escapedTrim}]+',
-        caseSensitive: true,
-        multiLine: false,
-        dotAll: true);
-    return trim()
-        .replaceAllMapped(pattern, (match) => match[1]!.toString())
-        .trim();
+      '^[${trimmer.escapedTrim}]+'
+      '(.*(?<![${trimmer.escapedTrim}]+))'
+      '[${trimmer.escapedTrim}]+',
+      caseSensitive: true,
+      multiLine: false,
+      dotAll: true,
+    );
+    return trim().replaceAllMapped(pattern, (match) => match[1]!).trim();
   }
 
   String trimmed(List<String> trimmer) =>

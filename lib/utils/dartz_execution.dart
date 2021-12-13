@@ -27,11 +27,13 @@ class DartzExecution {
     Map<String, dynamic> messageParams = const <String, dynamic>{},
     String? moduleName,
   }) =>
-      callEither<Right>(() => execute(
-            caller,
-            messageParams: messageParams,
-            moduleName: moduleName,
-          ));
+      callEither<Right>(
+        () => execute(
+          caller,
+          messageParams: messageParams,
+          moduleName: moduleName,
+        ),
+      );
 
   static FutureOr<Right> execute<Right>(
     FutureOr<Right> Function() caller, {
@@ -58,23 +60,30 @@ extension _TaskException<E extends Either<Object, R>, R> on Task<E> {
     String? moduleName,
   }) =>
       map(
-        (either) => either.fold((obj) {
-          if (obj is FormattedException) {
-            return Left(obj);
-          } else if (obj is Exception) {
-            return Left(FormattedException(
-              obj,
-              stackTrace: stackTrace,
-              messageParams: messageParams,
-              moduleName: moduleName,
-            ));
-          }
-          return Left(FormattedException(
-            obj as Exception,
-            stackTrace: stackTrace,
-            messageParams: messageParams,
-            moduleName: moduleName,
-          ));
-        }, (_) => Right(_ as Rt)),
+        (either) => either.fold(
+          (obj) {
+            if (obj is FormattedException) {
+              return Left(obj);
+            } else if (obj is Exception) {
+              return Left(
+                FormattedException(
+                  obj,
+                  stackTrace: stackTrace,
+                  messageParams: messageParams,
+                  moduleName: moduleName,
+                ),
+              );
+            }
+            return Left(
+              FormattedException(
+                obj as Exception,
+                stackTrace: stackTrace,
+                messageParams: messageParams,
+                moduleName: moduleName,
+              ),
+            );
+          },
+          (_) => Right(_ as Rt),
+        ),
       );
 }
