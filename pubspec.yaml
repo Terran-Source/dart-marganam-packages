@@ -16,6 +16,8 @@ dependencies:
   # Functional programming
   dartz: ^0.10.0
 
+  # drift-sqlite, previously moor-sqlite
+  drift: ^1.1.0
   equatable: ^2.0.3
   extend: ^0.1.1
 
@@ -23,9 +25,6 @@ dependencies:
   http: ^0.13.3
 
   interpolation: ^2.1.2
-
-  # moor-sqlite
-  moor: ^4.5.0
 
   # path libraries
   path: ^1.8.0

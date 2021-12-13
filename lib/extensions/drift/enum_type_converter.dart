@@ -1,6 +1,6 @@
 library marganam.extensions.moor;
 
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 
 import '../enum.dart';
 
