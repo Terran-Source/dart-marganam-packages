@@ -6,52 +6,50 @@ import 'package:dartz/dartz.dart';
 
 import 'formatted_exception.dart';
 
-class DartzExecution {
-  static Future<Either<FormattedException, Right>> callEither<Right>(
-    FutureOr<Right> Function() caller, {
-    StackTrace? stackTrace,
-    Map<String, dynamic> messageParams = const <String, dynamic>{},
-    String? moduleName,
-  }) =>
-      Task<Right>(() => Future.sync(caller))
-          .attempt()
-          .mapException<Right>(
-            stackTrace: stackTrace,
-            messageParams: messageParams,
-            moduleName: moduleName,
-          )
-          .run();
-
-  static Future<Either<FormattedException, Right>> call<Right>(
-    FutureOr<Right> Function() caller, {
-    Map<String, dynamic> messageParams = const <String, dynamic>{},
-    String? moduleName,
-  }) =>
-      callEither<Right>(
-        () => execute(
-          caller,
-          messageParams: messageParams,
-          moduleName: moduleName,
-        ),
-      );
-
-  static FutureOr<Right> execute<Right>(
-    FutureOr<Right> Function() caller, {
-    Map<String, dynamic> messageParams = const <String, dynamic>{},
-    String? moduleName,
-  }) {
-    try {
-      return caller();
-    } on Exception catch (exception, stackTrace) {
-      throw FormattedException(
-        exception,
-        stackTrace: stackTrace,
-        messageParams: messageParams,
-        moduleName: moduleName,
-      );
-    }
+FutureOr<Right> dartzExecute<Right>(
+  FutureOr<Right> Function() caller, {
+  Map<String, dynamic> messageParams = const <String, dynamic>{},
+  String? moduleName,
+}) {
+  try {
+    return caller();
+  } on Exception catch (exception, stackTrace) {
+    throw FormattedException(
+      exception,
+      stackTrace: stackTrace,
+      messageParams: messageParams,
+      moduleName: moduleName,
+    );
   }
 }
+
+Future<Either<FormattedException, Right>> dartzCallEither<Right>(
+  FutureOr<Right> Function() caller, {
+  StackTrace? stackTrace,
+  Map<String, dynamic> messageParams = const <String, dynamic>{},
+  String? moduleName,
+}) =>
+    Task<Right>(() => Future.sync(caller))
+        .attempt()
+        .mapException<Right>(
+          stackTrace: stackTrace,
+          messageParams: messageParams,
+          moduleName: moduleName,
+        )
+        .run();
+
+Future<Either<FormattedException, Right>> dartzCall<Right>(
+  FutureOr<Right> Function() caller, {
+  Map<String, dynamic> messageParams = const <String, dynamic>{},
+  String? moduleName,
+}) =>
+    dartzCallEither<Right>(
+      () => dartzExecute(
+        caller,
+        messageParams: messageParams,
+        moduleName: moduleName,
+      ),
+    );
 
 extension _TaskException<E extends Either<Object, R>, R> on Task<E> {
   Task<Either<FormattedException, Rt>> mapException<Rt>({
