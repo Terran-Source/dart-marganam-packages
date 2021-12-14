@@ -25,6 +25,6 @@ extension Enums<T extends Enum> on Iterable<T> {
       'CHECK ($columnName IN (${toStrings(withQuote: true).join(',')}))';
 }
 
-extension EnumExt<T extends Enum> on T {
+extension EnumExt on Enum {
   String toEnumString({bool withQuote = false}) => withQuote ? "'$name'" : name;
 }
