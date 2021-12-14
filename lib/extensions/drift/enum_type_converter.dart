@@ -4,10 +4,12 @@ import 'package:drift/drift.dart';
 
 import '../enum.dart';
 
-class EnumTypeConverter<T> extends TypeConverter<T, String> {
+@Deprecated('use `EnumTextConverter` instead')
+class EnumTypeConverter<T extends Enum> extends TypeConverter<T, String> {
   final List<T> _values;
   final T? _default;
 
+  @Deprecated('use `EnumTextConverter` instead')
   const EnumTypeConverter(this._values, [this._default]);
 
   @override
@@ -17,6 +19,20 @@ class EnumTypeConverter<T> extends TypeConverter<T, String> {
   @override
   String? mapToSql(T? value) =>
       value?.toEnumString() ?? _default?.toEnumString();
+}
+
+class EnumTextConverter<T extends Enum> extends TypeConverter<T, String> {
+  final List<T> _values;
+  final T? _default;
+
+  const EnumTextConverter(this._values, [this._default]);
+
+  @override
+  T? mapToDart(String? fromDb) =>
+      (null == fromDb ? null : _values.find(fromDb)) ?? _default;
+
+  @override
+  String? mapToSql(T? value) => value?.toEnumString();
 }
 
 class ExtendedValueSerializer extends ValueSerializer {
@@ -31,9 +47,13 @@ class ExtendedValueSerializer extends ValueSerializer {
       return _defaultSerializer.fromJson<T>(json);
     } catch (_) {
       if (null == json) return null as T;
-      if (T == bool && json is int) return (json == 1) as T;
-      if (enumTypes.containsKey(T)) {
-        return enumTypes[T]!.find(json.toString()) as T;
+
+      final _typeList = <T>[];
+      if (_typeList is List<bool?> && json is int) {
+        return (json == 1) as T;
+      }
+      if (_typeList is List<Enum> && enumTypes.containsKey(T)) {
+        return (enumTypes[T]! as List<Enum>).find(json.toString()) as T;
       }
 
       return json as T;
@@ -42,11 +62,17 @@ class ExtendedValueSerializer extends ValueSerializer {
 
   @override
   dynamic toJson<T>(T value) {
-    if (value is DateTime) {
-      return value.millisecondsSinceEpoch;
-    }
-    if (enumTypes.containsKey(T)) return T.toEnumString();
+    try {
+      return _defaultSerializer.toJson(value);
+    } catch (_) {
+      if (value is DateTime) {
+        return value.millisecondsSinceEpoch;
+      }
+      if (value is Enum) {
+        return value.toEnumString();
+      }
 
-    return value;
+      return value;
+    }
   }
 }

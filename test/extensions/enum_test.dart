@@ -3,12 +3,17 @@ import 'package:test/test.dart';
 
 void main() {
   group(
-    'Enums for Enum.values() test',
+    'Enums for Enum.values() test:',
     () {
       // TODO:
-      test('description', () {
+      test('toStrings', () {
         // act
         final result = _Dummy.values.toStrings();
+
+        // assert
+        expect(result, isA<Iterable<String>>());
+        expect(result.length, _Dummy.values.length);
+        expect(result, [..._Dummy.values]);
       });
     },
     skip: true,
