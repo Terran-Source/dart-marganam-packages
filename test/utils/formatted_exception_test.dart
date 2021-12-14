@@ -8,6 +8,7 @@ import 'package:test/test.dart';
 final _interpolation = Interpolation();
 final Map<Type, String> _backUp = {};
 const newExceptionMessage = 'This is a dummy exception message';
+const _defaultAppName = 'Marganam.FormattedException';
 
 void main() {
   cloneMap(exceptionDisplay, _backUp);
@@ -175,7 +176,7 @@ void formattedExceptionGroupTest<T extends Exception>(
       expect(result.exception, exception);
       expect(result.message, exception.toString());
       expect(result.exceptionType, actualRuntimeType);
-      expect(result.logSource, 'FormattedException:Generic');
+      expect(result.logSource, '$_defaultAppName:Generic');
       expect(
         result.displayedMessage,
         _interpolation
@@ -222,7 +223,7 @@ void formattedExceptionGroupTest<T extends Exception>(
       expect(result.exception, exception);
       expect(result.message, exception.toString());
       expect(result.exceptionType, actualRuntimeType);
-      expect(result.logSource, 'FormattedException:$moduleName');
+      expect(result.logSource, '$_defaultAppName:$moduleName');
       expect(
         result.displayedMessage,
         _interpolation
@@ -270,7 +271,7 @@ void formattedExceptionGroupTest<T extends Exception>(
       expect(result.exception, exception);
       expect(result.message, messageParams['message']);
       expect(result.exceptionType, actualRuntimeType);
-      expect(result.logSource, 'FormattedException:Generic');
+      expect(result.logSource, '$_defaultAppName:Generic');
       expect(
         result.displayedMessage,
         _interpolation

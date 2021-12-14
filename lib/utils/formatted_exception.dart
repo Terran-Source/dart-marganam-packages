@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:interpolation/interpolation.dart';
 
 const _defaultExceptionMessage = 'Something went wrong. {message}';
-const _defaultAppName = 'FormattedException';
+const _defaultAppName = 'Marganam.FormattedException';
 
 final Map<Type, String> exceptionDisplay = {
   Exception: _defaultExceptionMessage,
@@ -32,7 +32,7 @@ void enhanceExceptionDisplay<T>(String message) =>
 
 class FormattedException<T extends Exception> {
   final T _exception;
-  late Map<String, dynamic> messageParams;
+  late Map<String, dynamic> _messageParams;
   final StackTrace? stackTrace;
   final String? moduleName;
 
@@ -47,8 +47,8 @@ class FormattedException<T extends Exception> {
     this.stackTrace,
     this.moduleName = 'Generic',
   }) {
-    this.messageParams = Map.of(messageParams ?? {});
-    this.messageParams['message'] ??= _exception.toString();
+    _messageParams = Map.of(messageParams ?? {});
+    _messageParams['message'] ??= _exception.toString();
     if (debug) {
       //// TODO: write structured log
       // _logger
@@ -72,6 +72,7 @@ class FormattedException<T extends Exception> {
   final _interpolation = Interpolation();
 
   T get exception => _exception;
+  Map<String, dynamic> get messageParams => _messageParams;
   String get message =>
       messageParams['message']?.toString() ?? _exception.toString();
   Type get exceptionType => _exception.runtimeType;
