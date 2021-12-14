@@ -31,6 +31,7 @@ String hashedAll(
   String? key,
   bool prefixLibrary = true,
 }) {
+  // keyLength must be between 16 & 4096
   final keyLength = null == hashLength || hashLength < 16
       ? 16
       : hashLength < 4096
@@ -119,6 +120,6 @@ String hashed(
 
 String randomString([int length = 16]) {
   final unicodeIntegers =
-      List<int>.generate(length, (index) => _random.nextInt(256));
+      List<int>.generate(length + 10, (index) => _random.nextInt(256));
   return base64Encode(unicodeIntegers).substring(0, length);
 }
