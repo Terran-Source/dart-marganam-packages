@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:dart_marganam/extensions.dart';
 import 'package:dart_marganam/utils/happy_hash.dart';
 import 'package:english_words/english_words.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   String libraryName;

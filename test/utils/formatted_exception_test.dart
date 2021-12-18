@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:dart_marganam/utils/formatted_exception.dart';
 import 'package:english_words/english_words.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:interpolation/interpolation.dart';
-import 'package:test/test.dart';
 
 final _interpolation = Interpolation();
 final Map<Type, String> _backUp = {};

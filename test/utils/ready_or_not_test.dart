@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'package:dart_marganam/utils/ready_or_not.dart';
-import 'package:test/test.dart';
-
-import '../matcher.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   late ReadyMade readyMade;
