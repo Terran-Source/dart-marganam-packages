@@ -50,7 +50,7 @@ class CustomQuery {
   /// ```
   final String source;
   final String identifier;
-  final ResourceFrom _from;
+  final ResourceFrom from;
   final Map<String, String> headers;
 
   /// set this **only** once before loading any file from asset
@@ -60,7 +60,7 @@ class CustomQuery {
 
   CustomQuery._(
     this.source,
-    this._from,
+    this.from,
     this.identifier, {
     this.headers = const <String, String>{},
   });
@@ -96,7 +96,7 @@ class CustomQuery {
   }
 
   Future<String?> _load() async {
-    switch (_from) {
+    switch (from) {
       case ResourceFrom.asset:
         // return compute(_getSqlQueryFromAsset, source);
         return _getSqlQueryFromAsset(source);
@@ -104,9 +104,9 @@ class CustomQuery {
         // return compute(_getSqlQueryFromRemote, this);
         return _getSqlQueryFromRemote(this);
       default:
-        UnimplementedError(
+        throw UnimplementedError(
           'ResourceFrom: '
-          '${_from.toEnumString(withQuote: true)} '
+          '${from.toEnumString(withQuote: true)} '
           'has not been implemented yet',
         );
     }
