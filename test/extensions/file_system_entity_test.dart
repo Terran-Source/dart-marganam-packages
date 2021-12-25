@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dart_marganam/extensions/file_system_entity.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('FileSystemExtension test', () {

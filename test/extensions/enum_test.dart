@@ -1,5 +1,5 @@
 import 'package:dart_marganam/extensions/enum.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('EnumTypeConverter test for Enum.values():', () {
