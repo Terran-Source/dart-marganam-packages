@@ -10,4 +10,4 @@ LazyDatabase openConnection(
   DatabaseSetup? setup,
   CreateWebDatabase? initializer,
 }) =>
-    throw UnimplementedError('Cannot open a connection to a sqlite database');
+    throw UnimplementedError('Cannot open connection to a sqlite database');
