@@ -10,6 +10,8 @@ import '../query_set.dart';
 
 mixin DaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
   late QuerySet queries;
+  int hashMinLength = 16;
+  int uniqueRetry = 15;
   bool get daoMixinReady => queries.ready;
 
   Future getDaoMixinReady() async {
@@ -46,14 +48,15 @@ mixin DaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
     List<String> items, {
     HashLibrary? hashLibrary,
     String? key,
-    int hashMinLength = 16,
-    int uniqueRetry = 15,
+    int? hashMinLength,
+    int? uniqueRetry,
   }) async {
     var result = '';
     var foundUnique = false;
     var attempts = 0;
-    var _hashLength = hashMinLength;
     final _hashLibrary = hashLibrary ?? HashLibrary.values.random;
+    var _hashLength = hashMinLength ?? this.hashMinLength;
+    final _uniqueRetry = uniqueRetry ?? this.uniqueRetry;
     do {
       result = hashedAll(
         items,
@@ -68,7 +71,7 @@ mixin DaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
       // If a unique Id is not found in every 3 attempts, increase the
       // hashLength
       if (attempts % 3 == 0) _hashLength++;
-    } while (attempts < uniqueRetry && !foundUnique);
+    } while (attempts < _uniqueRetry && !foundUnique);
     throw TimeoutException(
       'Can not found a suitable unique Id for '
       '$tableName after $attempts attempts',
