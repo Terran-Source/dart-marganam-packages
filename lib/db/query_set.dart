@@ -34,13 +34,12 @@ class QuerySet with ReadyOrNotMixin {
     getReadyWorker = _getReady;
   }
 
-  CustomQuery? getCustomQueryType(CustomQueryType queryType) {
+  CustomQuery? getCustomQuery(String identifier) {
     try {
       return queries.entries
           .firstWhere(
             (query) =>
-                query.key == queryType.name ||
-                query.value.identifier == queryType.name,
+                query.key == identifier || query.value.identifier == identifier,
           )
           .value;
     } catch (_) {
@@ -48,11 +47,16 @@ class QuerySet with ReadyOrNotMixin {
     }
   }
 
-  bool hasCustomQueryType(CustomQueryType queryType) => queries.entries.any(
+  CustomQuery? getCustomQueryType(CustomQueryType queryType) =>
+      getCustomQuery(queryType.name);
+
+  bool hasCustomQuery(String identifier) => queries.entries.any(
         (query) =>
-            query.key == queryType.name ||
-            query.value.identifier == queryType.name,
+            query.key == identifier || query.value.identifier == identifier,
       );
+
+  bool hasCustomQueryType(CustomQueryType queryType) =>
+      hasCustomQuery(queryType.name);
 
   bool get _anyAssetQuery =>
       queries.values.any((query) => query.from == ResourceFrom.asset) ||
@@ -75,6 +79,10 @@ class QuerySet with ReadyOrNotMixin {
     }
 
     for (final query in queries.entries) {
+      await query.value.load();
+    }
+
+    for (final query in migrations.entries) {
       await query.value.load();
     }
   }
