@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 
-typedef AsyncFunction<T> = FutureOr<T> Function();
+// TODO
+// typedef StateNotifier<T> = void Function(T state);
+typedef AsyncFunction<T> = Future<T> Function();
 
 /// Wrapper for stateful functionality to provide onInit calls in stateless
 /// widget.
@@ -34,16 +36,17 @@ class _StatefulWrapperState<T> extends State<StatefulWrapper<T>> {
   T get state => _state; // for annoying analyzer
 
   @override
-  Future initState() async {
+  void initState() {
     _status = _StatefulWrapperStatus.initiated;
     super.initState();
     try {
       _status = _StatefulWrapperStatus.inProgress;
-      final result = await widget.onInit();
-      setState(() {
-        _status = _StatefulWrapperStatus.completed;
-        _state = result;
-      });
+      widget.onInit().then(
+            (result) => setState(() {
+              _status = _StatefulWrapperStatus.completed;
+              _state = result;
+            }),
+          );
     } catch (e) {
       setState(() {
         _status = _StatefulWrapperStatus.error;
