@@ -30,9 +30,9 @@ class Parameter<T> {
   Stream<T> get stream => _controller.stream;
 }
 
-abstract class TypeConverter<Base, Converted> {
+abstract class BaseTypeConverter<Base, Converted> {
   String parameterName;
-  TypeConverter(this.parameterName);
+  BaseTypeConverter(this.parameterName);
   Base convertFrom(Converted source);
   Converted convertTo(Base source);
 }
