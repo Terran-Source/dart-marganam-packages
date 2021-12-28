@@ -14,8 +14,8 @@ LazyDatabase openConnection(
   CreateWebDatabase? initializer,
 }) =>
     LazyDatabase(
-      () => WebDatabase(
-        dbFile,
+      () async => WebDatabase.withStorage(
+        await DriftWebStorage.indexedDbIfSupported(dbFile),
         logStatements: logStatements ?? false,
         initializer: initializer,
       ),

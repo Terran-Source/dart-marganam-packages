@@ -10,25 +10,40 @@ import '../query_set.dart';
 
 mixin DaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
   late QuerySet queries;
+  bool _ready = false;
   int hashMinLength = 16;
   int uniqueRetry = 15;
-  bool get daoMixinReady => queries.ready;
 
-  Future getDaoMixinReady() async {
-    await queries.getReady();
-    await _runCustomQueryType(CustomQueryType.defaultStartup);
+  bool get daoMixinReady => queries.ready && _ready;
+
+  Future<void> _ensureMixinReadiness() async {
+    if (!daoMixinReady) await getDaoMixinReady();
   }
 
-  Future<void> _runCustomQueryType(CustomQueryType queryType) async {
-    final query = queries.getCustomQueryType(queryType);
-    if (null != query) {
-      await customStatement(await query.load() ?? '');
+  Future<void> getDaoMixinReady() async {
+    if (!_ready) {
+      driftRuntimeOptions.defaultSerializer =
+          ExtendedValueSerializer(enumTypes);
+      await queries.getReady();
+      _ready = true;
     }
   }
 
+  Future<void> runCustomQuery(String identifier) async {
+    await _ensureMixinReadiness();
+    final query = await queries.getCustomQuery(identifier)?.load() ?? '';
+    if (query.isNotEmpty) {
+      // print('$identifier: $query'); //debug
+      await customStatement(query);
+    }
+  }
+
+  Future<void> runCustomQueryType(CustomQueryType queryType) =>
+      runCustomQuery(queryType.name);
+
   Future<void> onCreate(Migrator m) async {
     await m.createAll();
-    await _runCustomQueryType(CustomQueryType.dataInitiation);
+    await runCustomQueryType(CustomQueryType.dataInitiation);
   }
 
   Future<void> onUpgrade(Migrator m, int from, int to) async {
@@ -38,9 +53,8 @@ mixin DaoMixin<T extends GeneratedDatabase> on DatabaseAccessor<T> {
   }
 
   Future<void> beforeOpen(OpeningDetails details, Migrator m) async {
-    driftRuntimeOptions.defaultSerializer = ExtendedValueSerializer(enumTypes);
-    await getDaoMixinReady();
-    await _runCustomQueryType(CustomQueryType.openingPragma);
+    await runCustomQueryType(CustomQueryType.defaultStartup);
+    await runCustomQueryType(CustomQueryType.openingPragma);
   }
 
   Future<String> uniqueId(

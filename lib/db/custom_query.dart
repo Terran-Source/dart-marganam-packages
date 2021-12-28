@@ -68,18 +68,12 @@ class CustomQuery {
   factory CustomQuery.fromAsset(
     String fileNameWithoutExtension, {
     String? identifier,
-  }) {
-    ArgumentError.checkNotNull(
-      sqlSourceAssetDirectory,
-      'CustomQuery.sqlSourceAssetDirectory',
-    );
-
-    return CustomQuery._(
-      fileNameWithoutExtension,
-      ResourceFrom.asset,
-      identifier ?? fileNameWithoutExtension,
-    );
-  }
+  }) =>
+      CustomQuery._(
+        fileNameWithoutExtension,
+        ResourceFrom.asset,
+        identifier ?? fileNameWithoutExtension,
+      );
 
   factory CustomQuery.fromWeb(
     String identifier,
@@ -99,6 +93,11 @@ class CustomQuery {
     switch (from) {
       case ResourceFrom.asset:
         // return compute(_getSqlQueryFromAsset, source);
+        ArgumentError.checkNotNull(
+          sqlSourceAssetDirectory,
+          'CustomQuery.sqlSourceAssetDirectory',
+        );
+
         return _getSqlQueryFromAsset(source);
       case ResourceFrom.web:
         // return compute(_getSqlQueryFromRemote, this);
