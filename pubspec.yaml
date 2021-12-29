@@ -31,6 +31,8 @@ dependencies:
 
   interpolation: ^2.1.2
 
+  json_annotation: ^4.4.0
+
   # path libraries
   path: ^1.8.0
   path_provider: ^2.0.8
