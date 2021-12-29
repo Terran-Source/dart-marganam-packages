@@ -8,7 +8,6 @@ import 'dart:typed_data';
 import 'package:dart_marganam/extensions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
@@ -16,6 +15,7 @@ import 'disposable.dart';
 import 'formatted_exception.dart';
 import 'initiated.dart';
 import 'ready_or_not.dart';
+import 'rest_client.dart';
 
 String get _moduleName => 'file_provider';
 
@@ -338,7 +338,7 @@ class RemoteFileCache
 
   final _cacheDirectory = '__fileCache';
   final _cacheFile = '__fileCache.json';
-  final _client = http.Client();
+  final _client = RestClient();
   final _fileCache = <String, CacheFile>{};
 
   late DirectoryInfo _directoryInfo;
@@ -390,12 +390,8 @@ class RemoteFileCache
   }) async {
     try {
       final localIdentifier = _getIdentifier(source, identifier);
-      // :Old Method:
-      // var request = http.Request('GET', Uri.parse(source));
-      // request.headers.addAll(headers);
-      // final response = await _client.send(request);
-      // :New Method:
-      final response = await _client.get(Uri.parse(source), headers: headers);
+      final response =
+          await _client.getFromSource(source: source, headers: headers);
       if (response.isSuccessStatusCode) {
         final fileName =
             response.fileName ?? '$localIdentifier${response.fileExtension}';
