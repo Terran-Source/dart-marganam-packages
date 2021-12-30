@@ -18,6 +18,9 @@ dependencies:
   # Functional programming
   dartz: ^0.10.1
 
+  # http-helper
+  dio: ^4.0.4
+
   # drift-sqlite, previously moor-sqlite
   drift: ^1.1.1
   equatable: ^2.0.3
