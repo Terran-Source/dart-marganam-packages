@@ -99,13 +99,14 @@ Future<File> saveTextFile(
   Encoding encoding = utf8,
   bool isSupportFile = false,
   bool isAbsolute = false,
+  bool flush = true,
 }) async {
   final file = await getFile(
     filePath,
     isSupportFile: isSupportFile,
     isAbsolute: isAbsolute,
   );
-  return file.writeAsString(text, mode: mode, encoding: encoding, flush: true);
+  return file.writeAsString(text, mode: mode, encoding: encoding, flush: flush);
 }
 
 Future<File> appendTextToFile(
@@ -114,6 +115,7 @@ Future<File> appendTextToFile(
   Encoding encoding = utf8,
   bool isSupportFile = false,
   bool isAbsolute = false,
+  bool flush = true,
 }) =>
     saveTextFile(
       filePath,
@@ -122,6 +124,7 @@ Future<File> appendTextToFile(
       encoding: encoding,
       isSupportFile: isSupportFile,
       isAbsolute: isAbsolute,
+      flush: flush,
     );
 
 Future<File> saveFileAsBytes(
@@ -130,13 +133,14 @@ Future<File> saveFileAsBytes(
   FileMode mode = FileMode.writeOnly,
   bool isSupportFile = false,
   bool isAbsolute = false,
+  bool flush = true,
 }) async {
   final file = await getFile(
     filePath,
     isSupportFile: isSupportFile,
     isAbsolute: isAbsolute,
   );
-  return file.writeAsBytes(fileContent, mode: mode, flush: true);
+  return file.writeAsBytes(fileContent, mode: mode, flush: flush);
 }
 
 Future<File> appendBytesToFile(
@@ -144,6 +148,7 @@ Future<File> appendBytesToFile(
   Uint8List fileContent, {
   bool isSupportFile = false,
   bool isAbsolute = false,
+  bool flush = true,
 }) =>
     saveFileAsBytes(
       filePath,
@@ -151,15 +156,18 @@ Future<File> appendBytesToFile(
       mode: FileMode.writeOnlyAppend,
       isSupportFile: isSupportFile,
       isAbsolute: isAbsolute,
+      flush: flush,
     );
 
-Future<File> saveFileAsByteStream(
+Future<IOSink> saveFileAsByteStream(
   String filePath,
   Stream<List<int>> fileContent, {
   FileMode mode = FileMode.writeOnly,
   Encoding encoding = utf8,
   bool isSupportFile = false,
   bool isAbsolute = false,
+  bool flush = true,
+  Function? onError,
 }) async {
   final file = await getFile(
     filePath,
@@ -167,18 +175,26 @@ Future<File> saveFileAsByteStream(
     isAbsolute: isAbsolute,
   );
   final sink = file.openWrite(mode: mode, encoding: encoding);
-  await fileContent.pipe(sink);
-  await sink.flush();
-  await sink.close();
-  return file;
+  return sink.addStream(fileContent).then(
+    (_) async {
+      if (flush) {
+        await sink.flush();
+        await sink.close();
+      }
+      return sink;
+    },
+    onError: onError,
+  );
 }
 
-Future<File> appendByteStreamToFile(
+Future<IOSink> appendByteStreamToFile(
   String filePath,
   Stream<List<int>> fileContent, {
   Encoding encoding = utf8,
   bool isSupportFile = false,
   bool isAbsolute = false,
+  bool flush = true,
+  Function? onError,
 }) =>
     saveFileAsByteStream(
       filePath,
@@ -187,6 +203,8 @@ Future<File> appendByteStreamToFile(
       encoding: encoding,
       isSupportFile: isSupportFile,
       isAbsolute: isAbsolute,
+      flush: flush,
+      onError: onError,
     );
 
 Future<File> deleteFile(
