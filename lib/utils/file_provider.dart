@@ -15,7 +15,7 @@ import 'disposable.dart';
 import 'formatted_exception.dart';
 import 'initiated.dart';
 import 'ready_or_not.dart';
-import 'rest_client/rest_client.dart';
+import 'rest_client/http_client.temp.dart';
 
 String get _moduleName => 'file_provider';
 
@@ -356,7 +356,7 @@ class RemoteFileCache
 
   final _cacheDirectory = '__fileCache';
   final _cacheFile = '__fileCache.json';
-  final _client = RestClient();
+  final _client = HttpClientTemp();
   final _fileCache = <String, CacheFile>{};
 
   late DirectoryInfo _directoryInfo;
