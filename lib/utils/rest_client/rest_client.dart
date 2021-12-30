@@ -2,13 +2,25 @@ library marganam.utils.rest_client;
 
 import 'dart:math' as math;
 
+// import 'package:dio/dio.dart';
 import 'package:http/http.dart';
 import 'package:http/retry.dart';
 
 enum HttpMethod { GET, POST, PUT, DELETE, PATCH }
+enum RestClientType {
+  /// use vanilla [package:http] implementation
+  basic,
+
+  /// use advanced [package:dio] implementation
+  advanced,
+}
 
 class RestClient {
-  final _client = Client();
+  final RestClientType clientType;
+  final _httpClient = Client();
+  // final _dioClient = Dio();
+
+  RestClient({this.clientType = RestClientType.basic});
 
   // :Old Method:
   // var request = http.Request('GET', Uri.parse(source));
@@ -19,7 +31,7 @@ class RestClient {
     required Uri uri,
     Map<String, String>? headers,
   }) =>
-      _client.get(uri, headers: headers);
+      _httpClient.get(uri, headers: headers);
 
   Future<Response> getFromSource({
     required String source,
@@ -55,7 +67,7 @@ class RestClient {
     void Function(BaseRequest, BaseResponse?, int retryCount)? onRetry,
   }) =>
       RetryClient(
-        _client,
+        _httpClient,
         retries: retries,
         when: when,
         whenError: whenError,
@@ -63,7 +75,7 @@ class RestClient {
         onRetry: onRetry,
       );
 
-  void close() => _client.close();
+  void close() => _httpClient.close();
 }
 
 bool _defaultWhen(BaseResponse response) => response.statusCode == 503;

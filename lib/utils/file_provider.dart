@@ -15,7 +15,7 @@ import 'disposable.dart';
 import 'formatted_exception.dart';
 import 'initiated.dart';
 import 'ready_or_not.dart';
-import 'rest_client.dart';
+import 'rest_client/rest_client.dart';
 
 String get _moduleName => 'file_provider';
 
