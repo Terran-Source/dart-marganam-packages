@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:http/http.dart';
 import 'package:http/retry.dart';
 
-class HttpClientTemp {
+class RestClient {
   final _httpClient = Client();
 
   // :Old Method:
