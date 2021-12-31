@@ -1,13 +1,8 @@
-import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
-import 'package:drift/web.dart';
+library marganam.db.drift.open_connection;
 
-LazyDatabase openConnection(
-  String dbFile, {
-  bool? isSupportFile,
-  bool? logStatements,
-  bool? recreateDatabase,
-  DatabaseSetup? setup,
-  CreateWebDatabase? initializer,
-}) =>
-    throw UnimplementedError('Cannot open connection to a sqlite database');
+// ! TODO: *TEST* the following platform specific export
+export 'openConnection/open_connection_stub.dart'
+    if (dart.library.html) 'openConnection/web.dart'
+    if (dart.library.io) 'openConnection/native.dart'
+    // ? doubtful if it ever reaches
+    if (dart.library.core) 'openConnection/memory.dart';

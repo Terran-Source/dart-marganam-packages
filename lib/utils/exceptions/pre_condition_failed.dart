@@ -1,5 +1,3 @@
-library marganam.utils.exceptions;
-
 const _defaultMessage = 'PreConditionException not met.';
 
 class PreConditionFailedException implements Exception {

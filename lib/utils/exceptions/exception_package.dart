@@ -1,14 +1,9 @@
-library marganam.utils.exceptions;
-
 import 'dart:async';
-
-import 'package:dart_marganam/utils/ready_or_not.dart';
 
 import '../formatted_exception.dart';
 import '../initiated.dart';
+import '../ready_or_not.dart';
 import 'pre_condition_failed.dart';
-
-export 'pre_condition_failed.dart';
 
 class ExceptionPackage with ReadyOrNotMixin implements Initiated {
   factory ExceptionPackage() => universal;

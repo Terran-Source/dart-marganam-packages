@@ -1,5 +1,3 @@
-library marganam.utils.rest_client;
-
 import 'dart:math' as math;
 
 // import 'package:dio/dio.dart';
