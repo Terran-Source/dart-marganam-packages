@@ -9,59 +9,17 @@ import 'package:dart_marganam/extensions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
 
 import 'disposable.dart';
+import 'file_provider/file_system_provider.dart';
 import 'formatted_exception.dart';
 import 'initiated.dart';
 import 'ready_or_not.dart';
 import 'rest_client.dart';
 
+export 'file_provider/file_system_provider.dart';
+
 String get _moduleName => 'file_provider';
-
-Future<String> getAbsolutePath(
-  String path, {
-  bool isSupportDirectory = false,
-  bool isAbsolute = false,
-}) async {
-  final targetDirectory = isAbsolute
-      ? ''
-      : (isSupportDirectory
-              ? await getApplicationSupportDirectory()
-              : await getApplicationDocumentsDirectory())
-          .path;
-  return p.join(targetDirectory, path);
-}
-
-Future<Directory> getDirectory(
-  String path, {
-  bool isSupportDirectory = false,
-  bool isAbsolute = false,
-}) async =>
-    Directory(
-      await getAbsolutePath(
-        path,
-        isSupportDirectory: isSupportDirectory,
-        isAbsolute: isAbsolute,
-      ),
-    );
-
-Future<File> getFile(
-  String filePath, {
-  bool isSupportFile = false,
-  bool recreateFile = false,
-  bool isAbsolute = false,
-}) async {
-  final file = File(
-    await getAbsolutePath(
-      filePath,
-      isSupportDirectory: isSupportFile,
-      isAbsolute: isAbsolute,
-    ),
-  );
-  if (recreateFile && await file.exists()) await file.delete();
-  return file;
-}
 
 Future<String?> getFileText(
   String filePath, {

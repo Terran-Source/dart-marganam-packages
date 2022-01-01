@@ -23,6 +23,9 @@ dependencies:
   equatable: ^2.0.3
   extend: ^0.1.1
 
+  # file-provider
+  file: ^6.1.2
+
   flutter:
     sdk: flutter
 
