@@ -1,4 +1,4 @@
-library marganam.extensions;
+library marganam.extensions.file_system_entity;
 
 import 'dart:io';
 import 'package:path/path.dart' as p;

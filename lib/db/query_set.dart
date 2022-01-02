@@ -1,7 +1,9 @@
-import '../db/enums.dart';
+library marganam.db.query_set;
+
 import '../utils/file_provider.dart';
 import '../utils/ready_or_not.dart';
 import 'custom_query.dart';
+import 'enums.dart';
 
 class QuerySet with ReadyOrNotMixin {
   final Map<String, CustomQuery> queries;

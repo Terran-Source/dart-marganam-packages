@@ -1,4 +1,4 @@
-library marganam.extensions;
+library marganam.extensions.enum_xt;
 
 import 'dart:math';
 

@@ -1,4 +1,4 @@
-library marganam.extensions;
+library marganam.extensions.http_response;
 
 import 'dart:convert';
 import 'dart:io';

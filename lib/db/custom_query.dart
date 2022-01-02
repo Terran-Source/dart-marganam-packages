@@ -1,4 +1,4 @@
-library marganam.db;
+library marganam.db.custom_query;
 
 import '../extensions/enum.dart';
 import '../utils/file_provider.dart';
